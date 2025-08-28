@@ -25,6 +25,7 @@ export const en = {
     "code.fix": "Tip: Keep changes minimal; justify only when necessary.",
     translate: "Tip: Specify source/target and tone.",
     summarize: "Tip: Specify target length and audience.",
-    writing: "Tip: Specify content type, audience, tone, and structure requirements.",
+    writing:
+      "Tip: Specify content type, audience, tone, and structure requirements.",
   },
 };
