@@ -34,6 +34,16 @@ export function buildLocalSuggestion(
   const tmpl = pack.templates[i];
   const tip = pack.tips[i];
   const entity = extractEntity(text);
-  const instruction = tmpl ? tmpl({ entity }) : text;
+  
+  // Create a prompt that incorporates the user's actual input
+  let instruction: string;
+  if (tmpl) {
+    const basePrompt = tmpl({ entity });
+    // Add the user's input to make it more specific
+    instruction = `${basePrompt}\n\nUser request: "${text}"`;
+  } else {
+    instruction = text;
+  }
+  
   return { instruction, tip };
 }

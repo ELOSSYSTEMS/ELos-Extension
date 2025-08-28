@@ -7,27 +7,43 @@ export type Intent =
 
 export function routeIntent(s: string): Intent {
   const text = s.toLowerCase();
-  
+
   // Code-related intents
-  if (/(error|stack trace|react|typescript|javascript|bug|fix|code|function|variable|import|export|console\.log|debug|exception)/i.test(text))
+  if (
+    /(error|stack trace|react|typescript|javascript|bug|fix|code|function|variable|import|export|console\.log|debug|exception)/i.test(
+      text
+    )
+  )
     return "code.fix";
-  
+
   // Translation intents
   if (/(translate|תרגם|ترجم|traducir|traduzir|перевести)/i.test(text))
     return "translate";
-  
+
   // Summary intents
-  if (/(summary|summarize|tl;dr|brief|overview|recap|main points|key points)/i.test(text))
+  if (
+    /(summary|summarize|tl;dr|brief|overview|recap|main points|key points)/i.test(
+      text
+    )
+  )
     return "summarize";
-  
+
   // Ad/marketing intents
-  if (/(ad|advertisement|headline|meta|google|cta|call to action|marketing|campaign|promote|sell|buy now)/i.test(text))
+  if (
+    /(ad|advertisement|headline|meta|google|cta|call to action|marketing|campaign|promote|sell|buy now)/i.test(
+      text
+    )
+  )
     return "ads";
-  
+
   // Product/e-commerce intents (more specific)
-  if (/(product (page|description|review)|sku|shopify|candle|bouquet|e-commerce|store|shop|buy|purchase|price|inventory)/i.test(text))
+  if (
+    /(product (page|description|review)|sku|shopify|candle|bouquet|e-commerce|store|shop|buy|purchase|price|inventory)/i.test(
+      text
+    )
+  )
     return "copy.product";
-  
+
   // Default to general copy/product for most other cases
   return "copy.product";
 }

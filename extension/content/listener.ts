@@ -32,7 +32,7 @@ async function premiumRewrite(
           reject(new Error(chrome.runtime.lastError.message));
           return;
         }
-        
+
         if (!resp || resp.error)
           return reject(resp?.error || "EPP_REWRITE_FAILED");
         resolve(resp);
@@ -52,7 +52,10 @@ export function attachIdleListener() {
     let val: string;
     if (input instanceof HTMLTextAreaElement) {
       val = input.value;
-    } else if (input instanceof HTMLDivElement && input.contentEditable === "true") {
+    } else if (
+      input instanceof HTMLDivElement &&
+      input.contentEditable === "true"
+    ) {
       val = input.textContent || input.innerText || "";
     } else {
       val = (input as any).value || "";
@@ -72,14 +75,24 @@ export function attachIdleListener() {
 
       const locale = detectLocale(text);
       const intent = routeIntent(text);
-      
-      console.log("EPP Debug:", { text: text.substring(0, 50), locale, intent });
-      
+
+      console.log("EPP Debug:", {
+        originalText: text,
+        textLength: text.length,
+        locale,
+        intent,
+        words: text.split(/\s+/).length,
+      });
+
       // Check if extension context is still valid before accessing storage
       if (!chrome.runtime?.id) {
         console.log("EPP: Extension context invalidated, using local mode");
         const local = buildLocalSuggestion(text, locale, intent);
-        if (local.instruction && local.instruction !== text && local.instruction.length > text.length * 1.2) {
+        if (
+          local.instruction &&
+          local.instruction !== text &&
+          local.instruction.length > text.length * 1.2
+        ) {
           renderSuggestion({
             instruction: local.instruction,
             tip: local.tip,
@@ -105,6 +118,12 @@ export function attachIdleListener() {
           const local = buildLocalSuggestion(text, locale, intent);
           instruction = local.instruction;
           tip = local.tip;
+          console.log("EPP Local suggestion:", { 
+            input: text, 
+            intent, 
+            locale, 
+            output: instruction.substring(0, 100) + "..." 
+          });
         }
 
         // Only show if the instruction is significantly different from original
