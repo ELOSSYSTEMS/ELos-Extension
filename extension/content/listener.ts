@@ -73,6 +73,8 @@ export function attachIdleListener() {
       const locale = detectLocale(text);
       const intent = routeIntent(text);
       
+      console.log("EPP Debug:", { text: text.substring(0, 50), locale, intent });
+      
       // Check if extension context is still valid before accessing storage
       if (!chrome.runtime?.id) {
         console.log("EPP: Extension context invalidated, using local mode");

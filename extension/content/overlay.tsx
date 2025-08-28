@@ -24,7 +24,9 @@ function positionHost() {
   const input = getInputEl();
   if (!input || !host) return;
   const r = input.getBoundingClientRect();
-  host.style.top = `${Math.max(8, r.top + window.scrollY - 110)}px`;
+  // Position above the input with some margin
+  const margin = 16;
+  host.style.top = `${Math.max(8, r.top + window.scrollY - 200)}px`;
 }
 
 function Card({
@@ -50,13 +52,18 @@ function Card({
       tabIndex={-1}
       dir={locale === "he" ? "rtl" : "ltr"}
       style={{
-        background: "#111",
+        background: "#303030",
         color: "#fff",
-        border: "1px solid rgba(255,255,255,0.12)",
-        borderRadius: "12px",
-        padding: "12px 14px",
-        boxShadow: "0 8px 24px rgba(0,0,0,0.35)",
+        border: "1px solid rgba(255,255,255,0.05)",
+        borderRadius: "28px",
+        padding: "10px 10px",
+        boxShadow: "0px 4px 12px 0px rgba(0,0,0,0.1), inset 0px 0px 1px 0px rgba(255,255,255,0.2)",
         pointerEvents: "auto",
+        fontFamily: "ui-sans-serif, -apple-system, system-ui, 'Segoe UI', Helvetica, 'Apple Color Emoji', Arial, sans-serif",
+        fontSize: "16px",
+        lineHeight: "24px",
+        maxWidth: "640px",
+        width: "100%",
       }}
       onKeyDown={(e) => {
         if (e.key === "Escape") onDismiss();
@@ -66,16 +73,28 @@ function Card({
         }
       }}
     >
-      <div
-        style={{ fontSize: "13px", lineHeight: 1.5, whiteSpace: "pre-wrap" }}
-      >
-        {text}
-      </div>
-      {tip && (
-        <div style={{ opacity: 0.8, fontSize: "12px", marginTop: 6 }}>
-          {tip}
+              <div
+          style={{ 
+            fontSize: "16px", 
+            lineHeight: "24px", 
+            whiteSpace: "pre-wrap",
+            color: "#fff",
+            fontWeight: "400"
+          }}
+        >
+          {text}
         </div>
-      )}
+        {tip && (
+          <div style={{ 
+            opacity: 0.69, 
+            fontSize: "14px", 
+            marginTop: 8,
+            color: "#ffffff69",
+            fontWeight: "400"
+          }}>
+            {tip}
+          </div>
+        )}
       <div
         style={{
           display: "flex",
@@ -84,33 +103,50 @@ function Card({
           justifyContent: "flex-end",
         }}
       >
-        <button
-          onClick={onDismiss}
-          style={{
-            background: "transparent",
-            color: "#ccc",
-            border: "1px solid #444",
-            borderRadius: 8,
-            padding: "6px 10px",
-            cursor: "pointer",
-          }}
-        >
-          Dismiss (Esc)
-        </button>
-        <button
-          onClick={onAccept}
-          style={{
-            background: "#4F8EF7",
-            color: "#000",
-            border: "none",
-            borderRadius: 8,
-            padding: "6px 12px",
-            cursor: "pointer",
-            fontWeight: 600,
-          }}
-        >
-          Accept (Tab)
-        </button>
+                    <button
+              onClick={onDismiss}
+              style={{
+                background: "transparent",
+                color: "#f3f3f3",
+                border: "1px solid rgba(255,255,255,0.26)",
+                borderRadius: "28px",
+                padding: "6px 12px",
+                cursor: "pointer",
+                fontSize: "14px",
+                fontWeight: "400",
+                transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+              }}
+            >
+              Dismiss (Esc)
+            </button>
+            <button
+              onClick={onAccept}
+              style={{
+                background: "#fff",
+                color: "#0d0d0d",
+                border: "none",
+                borderRadius: "28px",
+                padding: "6px 12px",
+                cursor: "pointer",
+                fontWeight: "400",
+                fontSize: "14px",
+                transition: "all 0.15s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255,255,255,0.9)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#fff";
+              }}
+            >
+              Accept (Tab)
+            </button>
       </div>
     </div>
   );

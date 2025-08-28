@@ -75,16 +75,19 @@ export function mountFloatingPlus() {
           console.log("EPP: No input element found");
           return;
         }
-        
+
         let raw: string;
         if (el instanceof HTMLTextAreaElement) {
           raw = el.value;
-        } else if (el instanceof HTMLDivElement && el.contentEditable === "true") {
+        } else if (
+          el instanceof HTMLDivElement &&
+          el.contentEditable === "true"
+        ) {
           raw = el.textContent || el.innerText || "";
         } else {
           raw = (el as any).value || "";
         }
-        
+
         if (!raw.trim()) {
           console.log("EPP: No text to rewrite");
           return;

@@ -6,12 +6,28 @@ export type Intent =
   | "summarize";
 
 export function routeIntent(s: string): Intent {
-  if (/(product (page|description)|sku|shopify|candle|bouquet)/i.test(s))
-    return "copy.product";
-  if (/(ad|headline|meta|google|cta)/i.test(s)) return "ads";
-  if (/(error|stack trace|react|typescript|bug|fix)/i.test(s))
+  const text = s.toLowerCase();
+  
+  // Code-related intents
+  if (/(error|stack trace|react|typescript|javascript|bug|fix|code|function|variable|import|export|console\.log|debug|exception)/i.test(text))
     return "code.fix";
-  if (/(translate|תרגם|ترجم)/i.test(s)) return "translate";
-  if (/(summary|summarize|tl;dr)/i.test(s)) return "summarize";
+  
+  // Translation intents
+  if (/(translate|תרגם|ترجم|traducir|traduzir|перевести)/i.test(text))
+    return "translate";
+  
+  // Summary intents
+  if (/(summary|summarize|tl;dr|brief|overview|recap|main points|key points)/i.test(text))
+    return "summarize";
+  
+  // Ad/marketing intents
+  if (/(ad|advertisement|headline|meta|google|cta|call to action|marketing|campaign|promote|sell|buy now)/i.test(text))
+    return "ads";
+  
+  // Product/e-commerce intents (more specific)
+  if (/(product (page|description|review)|sku|shopify|candle|bouquet|e-commerce|store|shop|buy|purchase|price|inventory)/i.test(text))
+    return "copy.product";
+  
+  // Default to general copy/product for most other cases
   return "copy.product";
 }
