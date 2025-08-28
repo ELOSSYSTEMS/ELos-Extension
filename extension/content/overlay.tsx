@@ -12,6 +12,26 @@ function ensureHost() {
   host.style.position = "fixed";
   host.style.zIndex = "2147483647";
   host.style.pointerEvents = "none";
+  
+  // Add custom scrollbar styles
+  const style = document.createElement("style");
+  style.textContent = `
+    #epp-overlay-host *::-webkit-scrollbar {
+      width: 8px;
+    }
+    #epp-overlay-host *::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #epp-overlay-host *::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+    }
+    #epp-overlay-host *::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.3);
+    }
+  `;
+  document.head.appendChild(style);
+  
   document.body.appendChild(host);
   return host;
 }
@@ -70,10 +90,15 @@ function Card({
         fontSize: "16px",
         lineHeight: "24px",
         width: "100%",
+        maxHeight: "400px",
+        overflowY: "auto",
         // Match the composer container's styling
         containInlineSize: "inline-size",
         overflowClip: "clip",
         backgroundClip: "padding-box",
+        // Custom scrollbar styling to match ChatGPT
+        scrollbarWidth: "thin",
+        scrollbarColor: "rgba(255,255,255,0.2) transparent",
       }}
       onKeyDown={(e) => {
         if (e.key === "Escape") onDismiss();
@@ -83,17 +108,20 @@ function Card({
         }
       }}
     >
-      <div
-        style={{
-          fontSize: "16px",
-          lineHeight: "24px",
-          whiteSpace: "pre-wrap",
-          color: "#fff",
-          fontWeight: "400",
-        }}
-      >
-        {text}
-      </div>
+             <div
+         style={{
+           fontSize: "16px",
+           lineHeight: "24px",
+           whiteSpace: "pre-wrap",
+           color: "#fff",
+           fontWeight: "400",
+           padding: "4px 0",
+           maxHeight: "320px",
+           overflowY: "auto",
+         }}
+       >
+         {text}
+       </div>
       {tip && (
         <div
           style={{
