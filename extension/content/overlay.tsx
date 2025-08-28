@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { createRoot } from "react-dom/client";
-import { getInputEl, injectValue } from "./injector";
+import { getInputEl, getComposerContainer, injectValue } from "./injector";
 
 let root: ReturnType<typeof createRoot> | null = null;
 let host: HTMLDivElement | null = null;
@@ -17,12 +17,15 @@ function ensureHost() {
 }
 
 function positionHost() {
+  // Try to get the composer container first, fallback to input
+  const container = getComposerContainer();
   const input = getInputEl();
-  if (!input || !host) return;
-  const r = input.getBoundingClientRect();
+  const element = container || input;
   
-  // Position it to look like it's emerging from the input
-  // Place it just above the input with a small gap
+  if (!element || !host) return;
+  const r = element.getBoundingClientRect();
+  
+  // Position it to look like it's emerging from the composer container
   const gap = 8;
   host.style.top = `${r.top + window.scrollY - gap}px`;
   host.style.left = `${r.left}px`;
@@ -66,8 +69,11 @@ function Card({
           "ui-sans-serif, -apple-system, system-ui, 'Segoe UI', Helvetica, 'Apple Color Emoji', Arial, sans-serif",
         fontSize: "16px",
         lineHeight: "24px",
-        maxWidth: "640px",
         width: "100%",
+        // Match the composer container's styling
+        containInlineSize: "inline-size",
+        overflowClip: "clip",
+        backgroundClip: "padding-box",
       }}
       onKeyDown={(e) => {
         if (e.key === "Escape") onDismiss();

@@ -12,6 +12,17 @@ export function getInputEl(): HTMLTextAreaElement | HTMLDivElement | null {
   return document.querySelector("textarea");
 }
 
+export function getComposerContainer(): HTMLElement | null {
+  const h = location.hostname;
+  if (h.includes("chatgpt.com") || h.includes("openai.com")) {
+    // Find the main composer container with the rounded background
+    return document.querySelector(".group\\/composer") ||
+           document.querySelector("[data-type='unified-composer']") ||
+           document.querySelector(".bg-token-bg-primary");
+  }
+  return null;
+}
+
 export function injectValue(txt: string) {
   const el = getInputEl();
   if (!el) return;

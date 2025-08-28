@@ -118,11 +118,11 @@ export function attachIdleListener() {
           const local = buildLocalSuggestion(text, locale, intent);
           instruction = local.instruction;
           tip = local.tip;
-          console.log("EPP Local suggestion:", { 
-            input: text, 
-            intent, 
-            locale, 
-            output: instruction.substring(0, 100) + "..." 
+          console.log("EPP Local suggestion:", {
+            input: text,
+            intent,
+            locale,
+            output: instruction.substring(0, 100) + "...",
           });
         }
 
