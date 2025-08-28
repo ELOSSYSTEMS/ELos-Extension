@@ -32,6 +32,12 @@ async function premiumRewrite(
 let idleTimer: number | undefined;
 let lastValue = "";
 
+// Global flag to track if suggestion is being shown
+declare global {
+  var isShowingSuggestion: boolean;
+}
+globalThis.isShowingSuggestion = false;
+
 export function attachIdleListener() {
   const input = getInputEl();
   if (!input) return;
@@ -44,7 +50,8 @@ export function attachIdleListener() {
 
     idleTimer = window.setTimeout(async () => {
       const text = lastValue.trim();
-      if (!text) return;
+      // Only trigger suggestions for meaningful text (at least 10 characters)
+      if (!text || text.length < 10 || globalThis.isShowingSuggestion) return;
 
       const locale = detectLocale(text);
       const intent = routeIntent(text);
@@ -66,16 +73,23 @@ export function attachIdleListener() {
           tip = local.tip;
         }
 
-        renderSuggestion({ instruction, tip, locale });
+        // Only show suggestion if it's different from the original text
+        if (instruction && instruction !== text) {
+          globalThis.isShowingSuggestion = true;
+          renderSuggestion({ instruction, tip, locale });
+        }
       } catch {
         const local = buildLocalSuggestion(text, locale, intent);
-        renderSuggestion({
-          instruction: local.instruction,
-          tip: local.tip,
-          locale,
-        });
+        if (local.instruction && local.instruction !== text) {
+          globalThis.isShowingSuggestion = true;
+          renderSuggestion({
+            instruction: local.instruction,
+            tip: local.tip,
+            locale,
+          });
+        }
       }
-    }, 2000); // 2s idle
+    }, 3000); // Increased to 3s idle to reduce frequency
   };
 
   input.addEventListener("input", onChange);

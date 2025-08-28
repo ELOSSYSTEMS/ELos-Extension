@@ -132,9 +132,13 @@ export function renderSuggestion({
   const onAccept = () => {
     injectValue(instruction);
     unmount();
+    // Reset the suggestion flag
+    (globalThis as any).isShowingSuggestion = false;
   };
   const onDismiss = () => {
     unmount();
+    // Reset the suggestion flag
+    (globalThis as any).isShowingSuggestion = false;
   };
 
   function unmount() {
