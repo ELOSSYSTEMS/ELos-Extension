@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>EPP Wrapper — Options</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Development Options</h2>
+    <label
+      ><input type="checkbox" id="premiumEnabled" /> Enable Premium (API)
+      rewrite</label
+    >
+    <hr />
+    <label
+      >Provider:
+      <select id="provider">
+        <option value="openai">OpenAI (direct)</option>
+        <option value="custom">Custom endpoint</option>
+      </select>
+    </label>
+    <div id="openaiBlock">
+      <p>OpenAI API Key:</p>
+      <input
+        id="openaiKey"
+        type="password"
+        placeholder="sk-..."
+        style="width: 420px"
+      />
+    </div>
+    <div id="customBlock" style="display: none">
+      <p>Custom Endpoint:</p>
+      <input
+        id="customEndpoint"
+        type="text"
+        placeholder="https://api.yourdomain.com/epp/rewrite"
+        style="width: 420px"
+      />
+    </div>
+    <p><button id="save">Save</button> <span id="status"></span></p>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

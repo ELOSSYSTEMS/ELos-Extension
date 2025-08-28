@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        font-family: system-ui;
+        padding: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <label
+      ><input type="checkbox" id="premiumEnabled" /> Premium API rewrite</label
+    >
+    <script type="module">
+      const el = document.getElementById('premiumEnabled');
+      (async ()=>{
+        const { premiumEnabled=false } = await chrome.storage.sync.get({});
+        (el as HTMLInputElement).checked = premiumEnabled;
+        el!.addEventListener('change', async ()=>{
+          await chrome.storage.sync.set({ premiumEnabled: (el as HTMLInputElement).checked });
+        });
+      })();
+    </script>
+  </body>
+</html>

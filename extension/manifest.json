@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "EPP Wrapper Dev",
+  "version": "0.1.0",
+  "description": "Local (templated) + Premium (API) prompt wrapper with HE/EN/ES/PT locales.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": [
+    "https://chat.com/*",
+    "https://chatgpt.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "https://api.openai.com/*",
+    "https://*.yourdomain.com/*"
+  ],
+  "background": {
+    "service_worker": "background/index.js",
+    "type": "module"
+  },
+  "action": { "default_popup": "ui/popup.html" },
+  "options_page": "ui/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*"
+      ],
+      "js": ["content/index.js"]
+    }
+  ]
+}
