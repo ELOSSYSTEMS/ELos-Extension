@@ -7,7 +7,7 @@ import { routeIntent } from "./router";
 export function mountFloatingPlus() {
   // Check if already mounted
   if (document.getElementById("epp-floating-plus")) return;
- 
+
   const host = document.createElement("div");
   host.id = "epp-floating-plus";
   host.style.position = "fixed";
@@ -42,11 +42,11 @@ export function mountFloatingPlus() {
     const deltaY = e.clientY - startY;
     const newLeft = startLeft + deltaX;
     const newTop = startTop + deltaY;
-    
+
     // Keep within viewport bounds
     const maxLeft = window.innerWidth - 44;
     const maxTop = window.innerHeight - 44;
-    
+
     host.style.left = `${Math.max(0, Math.min(newLeft, maxLeft))}px`;
     host.style.top = `${Math.max(0, Math.min(newTop, maxTop))}px`;
     host.style.right = "auto";
@@ -59,7 +59,7 @@ export function mountFloatingPlus() {
       host.style.cursor = "move";
     }
   });
- 
+
   const root = createRoot(host);
   const Btn = () => (
     <button
@@ -69,13 +69,22 @@ export function mountFloatingPlus() {
           e.preventDefault();
           return;
         }
-        
+
         const el = getInputEl();
         if (!el) {
           console.log("EPP: No input element found");
           return;
         }
-        const raw = (el as HTMLTextAreaElement).value;
+        
+        let raw: string;
+        if (el instanceof HTMLTextAreaElement) {
+          raw = el.value;
+        } else if (el instanceof HTMLDivElement && el.contentEditable === "true") {
+          raw = el.textContent || el.innerText || "";
+        } else {
+          raw = (el as any).value || "";
+        }
+        
         if (!raw.trim()) {
           console.log("EPP: No text to rewrite");
           return;

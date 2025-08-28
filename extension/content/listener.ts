@@ -10,6 +10,12 @@ async function premiumRewrite(
   intent: string
 ): Promise<{ instruction: string; tip?: string }> {
   return new Promise((resolve, reject) => {
+    // Check if extension context is still valid
+    if (!chrome.runtime?.id) {
+      reject(new Error("Extension context invalidated"));
+      return;
+    }
+
     chrome.runtime.sendMessage(
       {
         type: "EPP_REWRITE",
@@ -21,6 +27,12 @@ async function premiumRewrite(
         },
       },
       (resp) => {
+        // Check for runtime errors
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        
         if (!resp || resp.error)
           return reject(resp?.error || "EPP_REWRITE_FAILED");
         resolve(resp);
@@ -37,7 +49,14 @@ export function attachIdleListener() {
   if (!input) return;
 
   const onChange = () => {
-    const val = (input as HTMLTextAreaElement).value;
+    let val: string;
+    if (input instanceof HTMLTextAreaElement) {
+      val = input.value;
+    } else if (input instanceof HTMLDivElement && input.contentEditable === "true") {
+      val = input.textContent || input.innerText || "";
+    } else {
+      val = (input as any).value || "";
+    }
     lastValue = val;
 
     if (idleTimer) window.clearTimeout(idleTimer);
@@ -46,13 +65,28 @@ export function attachIdleListener() {
       const text = lastValue.trim();
       // Only trigger for meaningful text (at least 10 characters and not just whitespace)
       if (!text || text.length < 10 || text.length > 1000) return;
-      
+
       // Don't trigger for very short or very long text
       const words = text.split(/\s+/).length;
       if (words < 3) return;
 
       const locale = detectLocale(text);
       const intent = routeIntent(text);
+      
+      // Check if extension context is still valid before accessing storage
+      if (!chrome.runtime?.id) {
+        console.log("EPP: Extension context invalidated, using local mode");
+        const local = buildLocalSuggestion(text, locale, intent);
+        if (local.instruction && local.instruction !== text && local.instruction.length > text.length * 1.2) {
+          renderSuggestion({
+            instruction: local.instruction,
+            tip: local.tip,
+            locale,
+          });
+        }
+        return;
+      }
+
       const { premiumEnabled = false } = await chrome.storage.sync.get({
         premiumEnabled: false,
       });
@@ -72,12 +106,20 @@ export function attachIdleListener() {
         }
 
         // Only show if the instruction is significantly different from original
-        if (instruction && instruction !== text && instruction.length > text.length * 1.2) {
+        if (
+          instruction &&
+          instruction !== text &&
+          instruction.length > text.length * 1.2
+        ) {
           renderSuggestion({ instruction, tip, locale });
         }
       } catch {
         const local = buildLocalSuggestion(text, locale, intent);
-        if (local.instruction && local.instruction !== text && local.instruction.length > text.length * 1.2) {
+        if (
+          local.instruction &&
+          local.instruction !== text &&
+          local.instruction.length > text.length * 1.2
+        ) {
           renderSuggestion({
             instruction: local.instruction,
             tip: local.tip,
