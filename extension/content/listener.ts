@@ -44,8 +44,12 @@ export function attachIdleListener() {
 
     idleTimer = window.setTimeout(async () => {
       const text = lastValue.trim();
-      // Only trigger for meaningful text (at least 5 characters)
-      if (!text || text.length < 5) return;
+      // Only trigger for meaningful text (at least 10 characters and not just whitespace)
+      if (!text || text.length < 10 || text.length > 1000) return;
+      
+      // Don't trigger for very short or very long text
+      const words = text.split(/\s+/).length;
+      if (words < 3) return;
 
       const locale = detectLocale(text);
       const intent = routeIntent(text);
@@ -67,16 +71,21 @@ export function attachIdleListener() {
           tip = local.tip;
         }
 
-        renderSuggestion({ instruction, tip, locale });
+        // Only show if the instruction is significantly different from original
+        if (instruction && instruction !== text && instruction.length > text.length * 1.2) {
+          renderSuggestion({ instruction, tip, locale });
+        }
       } catch {
         const local = buildLocalSuggestion(text, locale, intent);
-        renderSuggestion({
-          instruction: local.instruction,
-          tip: local.tip,
-          locale,
-        });
+        if (local.instruction && local.instruction !== text && local.instruction.length > text.length * 1.2) {
+          renderSuggestion({
+            instruction: local.instruction,
+            tip: local.tip,
+            locale,
+          });
+        }
       }
-    }, 2000); // 2s idle
+    }, 3000); // Increased to 3s idle
   };
 
   input.addEventListener("input", onChange);
