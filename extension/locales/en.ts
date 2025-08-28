@@ -1,24 +1,19 @@
 export const en = {
   templates: {
-    "copy.product": ({ entity }: { entity?: string }) =>
-      `You are an expert e-commerce copywriter for premium home decor.
-Write a complete product description for “${entity ?? "the product"}”.
-Audience: discerning shoppers seeking quality and elegance.
-Deliver: short hook (1–2 lines), key features (bulleted), detailed description (3–5 short paragraphs),
-care/size notes, and a concise CTA.
-Style: refined, concrete, zero fluff.`,
+    "copy.product": () =>
+      `Rewrite this as a professional product description request. Make it specific about the product type, target audience, and desired format. Include details about tone, structure, and key elements needed.`,
 
     ads: () =>
-      `You are a performance marketer. Produce 5 ad variants with headlines, primary text, and CTA. Keep them testable and distinct.`,
+      `Rewrite this as a clear social media or advertising request. Specify the platform, target audience, campaign goals, and any specific requirements like tone, length, or call-to-action.`,
 
     "code.fix": () =>
-      `You are a senior engineer. Provide a minimal patch and a one-paragraph rationale.`,
+      `Rewrite this as a clear technical debugging request. Specify the programming language, error details, what you've tried, and what outcome you need.`,
 
     translate: () =>
-      `You are a bilingual editor. Translate faithfully and preserve tone.`,
+      `Rewrite this as a clear translation request. Specify the source and target languages, context, tone, and any specific requirements.`,
 
     summarize: () =>
-      `You are a precise analyst. Produce a faithful summary with no loss of meaning.`,
+      `Rewrite this as a clear summarization request. Specify the content type, desired length, key points to focus on, and target audience.`,
   },
   tips: {
     "copy.product":

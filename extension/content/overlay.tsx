@@ -21,10 +21,10 @@ function positionHost() {
   const container = getComposerContainer();
   const input = getInputEl();
   const element = container || input;
-  
+
   if (!element || !host) return;
   const r = element.getBoundingClientRect();
-  
+
   // Position it to look like it's emerging from the composer container
   const gap = 8;
   host.style.top = `${r.top + window.scrollY - gap}px`;
