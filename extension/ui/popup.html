@@ -13,15 +13,6 @@
     <label
       ><input type="checkbox" id="premiumEnabled" /> Premium API rewrite</label
     >
-    <script type="module">
-      const el = document.getElementById('premiumEnabled');
-      (async ()=>{
-        const { premiumEnabled=false } = await chrome.storage.sync.get({});
-        (el as HTMLInputElement).checked = premiumEnabled;
-        el!.addEventListener('change', async ()=>{
-          await chrome.storage.sync.set({ premiumEnabled: (el as HTMLInputElement).checked });
-        });
-      })();
-    </script>
+    <script src="popup.js"></script>
   </body>
 </html>
