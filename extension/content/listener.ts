@@ -43,6 +43,8 @@ async function premiumRewrite(
 
 let idleTimer: number | undefined;
 let lastValue = "";
+let isShowingSuggestion = false;
+let lastAcceptedText = "";
 
 export function attachIdleListener() {
   const input = getInputEl();
@@ -72,6 +74,12 @@ export function attachIdleListener() {
       // Don't trigger for very short or very long text
       const words = text.split(/\s+/).length;
       if (words < 3) return;
+
+      // Don't trigger if we're already showing a suggestion
+      if ((globalThis as any).isShowingSuggestion) return;
+
+      // Don't trigger if this is the same text we just accepted
+      if (text === (globalThis as any).lastAcceptedText) return;
 
       const locale = detectLocale(text);
       const intent = routeIntent(text);
@@ -132,6 +140,7 @@ export function attachIdleListener() {
           instruction !== text &&
           instruction.length > text.length * 1.2
         ) {
+          (globalThis as any).isShowingSuggestion = true;
           renderSuggestion({ instruction, tip, locale });
         }
       } catch {
@@ -141,6 +150,7 @@ export function attachIdleListener() {
           local.instruction !== text &&
           local.instruction.length > text.length * 1.2
         ) {
+          (globalThis as any).isShowingSuggestion = true;
           renderSuggestion({
             instruction: local.instruction,
             tip: local.tip,

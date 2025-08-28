@@ -179,9 +179,14 @@ export function renderSuggestion({
 
   const onAccept = () => {
     injectValue(instruction);
+    // Reset flags to prevent immediate re-triggering
+    (globalThis as any).isShowingSuggestion = false;
+    (globalThis as any).lastAcceptedText = instruction;
     unmount();
   };
   const onDismiss = () => {
+    // Reset flag when dismissed
+    (globalThis as any).isShowingSuggestion = false;
     unmount();
   };
 
