@@ -14,6 +14,9 @@ export const en = {
 
     summarize: () =>
       `Rewrite this as a clear summarization request. Specify the content type, desired length, key points to focus on, and target audience.`,
+
+    writing: () =>
+      `Rewrite this as a clear writing request. Specify the type of content, target audience, tone, length, and any specific requirements or structure needed.`,
   },
   tips: {
     "copy.product":
@@ -22,5 +25,6 @@ export const en = {
     "code.fix": "Tip: Keep changes minimal; justify only when necessary.",
     translate: "Tip: Specify source/target and tone.",
     summarize: "Tip: Specify target length and audience.",
+    writing: "Tip: Specify content type, audience, tone, and structure requirements.",
   },
 };

@@ -92,6 +92,19 @@ function rewritePrompt(
         ""
       )}. Highlight the key points, main arguments, and essential information in a clear, organized format.`;
 
+    case "writing":
+      const content = text.replace(/^(write|compose|create|draft)\s+(me\s+)?(an?\s+)?/i, '');
+      if (lowerText.includes("essay")) {
+        return `Write a comprehensive essay about ${content}. Include a clear thesis statement, well-structured arguments with evidence, and a strong conclusion. Maintain an academic tone and provide balanced perspectives.`;
+      }
+      if (lowerText.includes("article") || lowerText.includes("blog")) {
+        return `Write an engaging article about ${content}. Include a compelling introduction, informative body sections, and a memorable conclusion. Use clear, accessible language and engaging storytelling.`;
+      }
+      if (lowerText.includes("report")) {
+        return `Write a detailed report about ${content}. Include an executive summary, key findings, analysis, and actionable recommendations. Use a professional, objective tone.`;
+      }
+      return `Write a well-structured piece about ${content}. Include a clear introduction, organized main content, and a strong conclusion. Specify the target audience and desired tone.`;
+
     default:
       return text;
   }

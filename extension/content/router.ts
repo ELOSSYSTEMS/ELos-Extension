@@ -3,7 +3,8 @@ export type Intent =
   | "ads"
   | "code.fix"
   | "translate"
-  | "summarize";
+  | "summarize"
+  | "writing";
 
 export function routeIntent(s: string): Intent {
   const text = s.toLowerCase();
@@ -28,9 +29,17 @@ export function routeIntent(s: string): Intent {
   )
     return "summarize";
 
+  // Writing intents (essays, articles, content)
+  if (
+    /(write|compose|create|draft|essay|article|blog|content|story|narrative|report|paper|document)/i.test(
+      text
+    )
+  )
+    return "writing";
+
   // Ad/marketing intents
   if (
-    /(ad|advertisement|headline|meta|google|cta|call to action|marketing|campaign|promote|sell|buy now)/i.test(
+    /(ad|advertisement|headline|meta|google|cta|call to action|marketing|campaign|promote|sell|buy now|facebook post|instagram|social media)/i.test(
       text
     )
   )
@@ -44,6 +53,6 @@ export function routeIntent(s: string): Intent {
   )
     return "copy.product";
 
-  // Default to general copy/product for most other cases
-  return "copy.product";
+  // Default to writing for general requests
+  return "writing";
 }
